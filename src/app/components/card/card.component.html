@@ -1,0 +1,68 @@
+@if (card()?.isVisible) {
+<div
+  cdkDragBoundary=".card-boundary"
+  cdkDrag
+  [cdkDragFreeDragPosition]="{ x: card()!.x, y: card()!.y }"
+  (cdkDragEnded)="onDragEnd($event)"
+  (cdkDragStarted)="onDragStart()"
+  class="absolute min-w-lg max-w-lg border-2 border-yellow-700 bg-orange-200 rounded transition-shadow duration-300 active:shadow-xl"
+>
+  <div cdkDragHandle class="flex justify-between p-2 bg-yellow-700">
+    @if (!card()?.isEdit){
+    <h1 class="text-lg text-ellipsis">{{ this.card()?.title }}</h1>
+    } @else {
+    <form class="flex flex-col gap-1" (ngSubmit)="saveEdits()">
+      <label for="title" class="text-sm">Note title</label>
+      <input
+        [(ngModel)]="editTitle"
+        type="text"
+        class="rounded bg-yellow-600"
+        id="title"
+        name="title"
+      />
+    </form>
+    }
+    <div class="flex gap-1">
+      <button class="border size-6 rounded-full" (click)="toggleEdit()">
+        <ng-icon [name]="'heroPencilSquare'" size="1.3rem"></ng-icon>
+      </button>
+
+      <button
+        class="border size-6 rounded-full"
+        (click)="toggleCardVisibility()"
+      >
+        <ng-icon [name]="'heroChevronDown'" size="1.3rem"></ng-icon>
+      </button>
+
+      <button class="border size-6 rounded-full" (click)="removeCard()">
+        <ng-icon [name]="'heroTrash'" size="1.3rem"></ng-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="p-2">
+    @if (!card()?.isEdit){
+    <p class="text-ellipsis overflow-hidden">{{ this.card()?.content }}</p>
+    } @else {
+    <form class="flex flex-col gap-1" (ngSubmit)="saveEdits()">
+      <label for="content" class="text-sm">Note content</label>
+      <textarea
+        [(ngModel)]="editContent"
+        height="auto"
+        class="rounded bg-orange-100"
+        id="content"
+        name="content"
+      ></textarea>
+      <div class="flex justify-end">
+        <button
+          type="submit"
+          class="rounded p-1 bg-yellow-700 hover:bg-yellow-600"
+        >
+          Save
+        </button>
+      </div>
+    </form>
+    }
+  </div>
+</div>
+}
